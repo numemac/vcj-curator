@@ -18,7 +18,7 @@ A bot that uses the Reddit API to moderate the r/vegancirclejerk subreddit (100k
 - WARNING: Putting your credentials in plain text is dangerous, consider using a secrets manager.
 - Be sure to replace the `/EXAMPLE/PATH`
 - Be sure to replace the `EXAMPLE_YOUR_USER` with your linux user name
-5. Copy or symlink your `vegancirclejerk.service` file to ~/.config/systemd/user/
+5. Copy or symlink your `vegancirclejerk.service` file to `~/.config/systemd/user/`.
 - `ln -s vegancirclejerk-python/systemd/vegancirclejerk.service ~/.config/systemd/user/`
 - `ln -s vegancirclejerk-python/systemd/vegancirclejerk.timer ~/.config/systemd/user/`
 6. Do the same for `vegancirclejerk.timer`
@@ -26,4 +26,6 @@ A bot that uses the Reddit API to moderate the r/vegancirclejerk subreddit (100k
 - `systemctl --user enable vegancirclejerk.timer`
 - `systemctl --user enable vegancirclejerk.service`
 - `systemctl --user start vegancirclejerk.timer`
-8. Verify that it's running by using `systemctl --user status vegancirclejerk.timer` and `systemctl --user status vegancirclejerk.service`
+8. Verify that it's running by using 
+- `systemctl --user status vegancirclejerk.timer`
+- `systemctl --user status vegancirclejerk.service`
