@@ -36,7 +36,6 @@ The bot is set to run every 30 minutes on Linux. The following instructions have
 - Use the `REDDIT_CLIENT_ID` and `REDDIT_CLIENT_SECRET` from step 1.
 - Set your `REDDIT_USERNAME` and `REDDIT_PASSWORD` to match your mod account's info.
 - Be sure to replace the `/EXAMPLE/PATH`
-- Be sure to replace the `EXAMPLE_YOUR_USER` with your linux user name
 
 ### Step 5. Set up systemd
 
