@@ -20,7 +20,12 @@ The bot is set to run every 30 minutes on Linux. The following instructions have
 
 ```git clone git@github.com:ryan-augustinsky/vegancirclejerk-python.git```
 
-### Step 3: Configure the service
+### Step 3: Install the dependencies
+
+- On Arch Linux you can just run: `sudo pacman -S python-praw`
+- Or you can create a venv and run `pip3 install vegancirclejerk-python/requirements.txt`
+
+### Step 4: Configure the service
 
 1. Copy the example service:
 
@@ -33,7 +38,7 @@ The bot is set to run every 30 minutes on Linux. The following instructions have
 - Be sure to replace the `/EXAMPLE/PATH`
 - Be sure to replace the `EXAMPLE_YOUR_USER` with your linux user name
 
-### Step 4. Set up systemd
+### Step 5. Set up systemd
 
 1. Copy or symlink your `vegancirclejerk.service` file to `~/.config/systemd/user/`.
 ```
@@ -48,7 +53,7 @@ systemctl --user enable vegancirclejerk.service
 systemctl --user start vegancirclejerk.timer
 ```
 
-### Step 5. Verify the service
+### Step 6. Verify the service
 
 Check that the service and timer are running:
 
