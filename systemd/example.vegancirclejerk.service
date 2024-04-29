@@ -12,7 +12,6 @@ Environment="REDDIT_USERNAME=YOUR REDDIT USERNAME"
 Environment="REDDIT_PASSWORD=YOUR REDDIT PASSWORD"
 User=EXAMPLE_YOUR_USER
 Group=EXAMPLE_YOUR_USER
-Restart=always
 
 [Install]
 WantedBy=multi-user.target
