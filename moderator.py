@@ -21,6 +21,7 @@ This is activism, right?'''
 reddit = praw.Reddit(
     client_id=os.environ.get('REDDIT_CLIENT_ID'),
     client_secret=os.environ.get('REDDIT_CLIENT_SECRET'),
+    password=os.environ.get('REDDIT_PASSWORD'),
     user_agent=USER_AGENT,
     username=os.environ.get('REDDIT_USERNAME'),
 )
@@ -75,7 +76,8 @@ def adjusted_minutes_ellapsed(created_utc : int, _minutes_ellapsed : int):
     """
     Calculates the adjusted number of minutes that have elapsed since the creation of a submission.
     Minutes are adjusted based on the time of day the submission was created.
-    This is done to account for the varying levels of activity on Reddit at different times of the day.
+    This is done to account for the varying levels of activity on Reddit at different times 
+    of the day.
 
     Parameters:
     created_utc (int): The Unix timestamp of the creation of the submission.
@@ -131,7 +133,7 @@ def calculate_target(_minutes_ellapsed : int = None, _submission : praw.models.S
     # 360 minutes = 36 upvotes
     # 720 minutes = 72 upvotes
     base_target = math.floor(_minutes_ellapsed / 10)
-    
+
     # Expect upvote rate to pick up after the first hour
     # 30 minutes = 1 + (0.5/12) = 1.0417
     # 60 minutes = 1 + (1/12) = 1.0833
@@ -173,12 +175,13 @@ def remove_submission(_submission : praw.models.Submission):
     """
     _submission.mod.remove(
         reason_id=REMOVAL_REASON_NOT_FUNNY,
-        mod_note=submission_str(_submission)
+        mod_note=submission_str(_submission)[:100]
     )
     _submission.mod.send_removal_message(
         type='public_as_subreddit',
         message=REMOVAL_MESSAGE_NOT_FUNNY
     )
+
     return None
 
 def should_remove(_submission : praw.models.Submission):
@@ -241,14 +244,14 @@ def submission_str(_submission : praw.models.Submission):
     _discussion_score = discussion_score(_submission.num_comments)
     _combined_score = _submission.score + _discussion_score
     _target_score = calculate_target(_adjusted_minutes_ellapsed)
-    lines.append(f"title: {_submission.title}")
-    lines.append(f"minutes_ellapsed: {_minutes_ellapsed}")
-    lines.append(f"adjusted_minutes_ellapsed: {_adjusted_minutes_ellapsed}")
-    lines.append(f"num_comments: {_submission.num_comments}")
+    lines.append(f"id: {_submission.id}")
+    lines.append(f"mins: {_minutes_ellapsed}")
+    lines.append(f"adj_mins: {_adjusted_minutes_ellapsed}")
+    lines.append(f"comments: {_submission.num_comments}")
     lines.append(f"score: {_submission.score}")
-    lines.append(f"discussion_score: {_discussion_score}")
-    lines.append(f"combined_score: {_combined_score}")
-    lines.append(f"target score: {_target_score}")
+    lines.append(f"d_score: {_discussion_score}")
+    lines.append(f"c_score: {_combined_score}")
+    lines.append(f"t_score: {_target_score}")
     return "\n".join(lines)
 
 def evaluate_submission(_submission : praw.models.Submission):
@@ -265,7 +268,8 @@ def evaluate_submission(_submission : praw.models.Submission):
     action(_submission)
 
     print(submission_str(_submission))
-    print("Action: ", action.__name__)
+    # Print the action.__name__ to the console in yellow
+    print(f"action: \033[93m{action.__name__}\033[0m")
     return None
 
 # loop through the submissions
