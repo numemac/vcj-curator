@@ -5,7 +5,6 @@ After=network.target
 [Service]
 Type=simple
 ExecStart=/usr/bin/python3 /EXAMPLE/PATH/vegancirclejerk-python/moderator.py
-WorkingDirectory=/EXAMPLE/PATH/vegancirclejerk-python
 Environment="REDDIT_CLIENT_ID=YOUR REDDIT CLIENT ID"
 Environment="REDDIT_CLIENT_SECRET=YOUR REDDIT CLIENT SECRET"
 Environment="REDDIT_USERNAME=YOUR REDDIT USERNAME"
