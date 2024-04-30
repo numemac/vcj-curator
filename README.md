@@ -1,4 +1,4 @@
-# Vegancirclejerk-Python
+# vcj-curator
 
 This is a bot that uses the Reddit API to moderate the r/vegancirclejerk subreddit, which has over 100k members.
 
@@ -18,20 +18,20 @@ The bot is set to run every 30 minutes on Linux. The following instructions have
 
 ### Step 2: Clone the repository
 
-```git clone git@github.com:ryan-augustinsky/vegancirclejerk-python.git```
+```git clone git@github.com:numemac/vcj-curator.git```
 
 ### Step 3: Install the dependencies
 
 - On Arch Linux you can just run: `sudo pacman -S python-praw`
-- Or you can create a venv and run `pip3 install vegancirclejerk-python/requirements.txt`
+- Or you can create a venv and run `pip3 install vcj-curator/requirements.txt`
 
 ### Step 4: Configure the service
 
 1. Copy the example service:
 
-```cp vegancirclejerk-python/systemd/example.vegancirclejerk.service vegancirclejerk-python/systemd/vegancirclejerk.service```
+```cp vcj-curator/systemd/example.vegancirclejerk.service vcj-curator/systemd/vegancirclejerk.service```
 
-2. Edit the service with your favourite editor, e.g., ```vi vegancirclejerk-python/systemd/vegancirclejerk.service.```
+2. Edit the service with your favourite editor, e.g., ```vi vcj-curator/systemd/vegancirclejerk.service.```
 - **WARNING:** Putting your credentials in plain text is dangerous, consider using a secrets manager.
 - Use the `REDDIT_CLIENT_ID` and `REDDIT_CLIENT_SECRET` from step 1.
 - Set your `REDDIT_USERNAME` and `REDDIT_PASSWORD` to match your mod account's info.
@@ -41,8 +41,8 @@ The bot is set to run every 30 minutes on Linux. The following instructions have
 
 1. Copy or symlink your `vegancirclejerk.service` file to `~/.config/systemd/user/`.
 ```
-ln -s vegancirclejerk-python/systemd/vegancirclejerk.service ~/.config/systemd/user/
-ln -s vegancirclejerk-python/systemd/vegancirclejerk.timer ~/.config/systemd/user/
+ln -s vcj-curator/systemd/vegancirclejerk.service ~/.config/systemd/user/
+ln -s vcj-curator/systemd/vegancirclejerk.timer ~/.config/systemd/user/
 ```
 
 2. Enable and start the service and timer:
