@@ -215,8 +215,8 @@ def should_remove(_submission : praw.models.Submission):
     if _minutes_ellapsed < (1 * 60):
         return False
 
-    # Don't remove submissions that are more than 12 hours old
-    if _minutes_ellapsed > (12 * 60):
+    # Don't remove submissions that are more than 4 hours old
+    if _minutes_ellapsed > (4 * 60):
         return False
 
     _discussion_score = discussion_score(_submission)
