@@ -4,9 +4,7 @@ vcjc_integration.py
 
 import praw
 import prawcore
-
-VCJ_SUBREDDIT_NAME = 'vegancirclejerk'
-VCJC_SUBREDDIT_NAME = 'vegancirclejerkchat'
+from constants import UNJERK_FLAIR, VCJ_SUBREDDIT_NAME, VCJC_SUBREDDIT_NAME
 
 def select_submission(_reddit):
     """
@@ -39,7 +37,7 @@ def crosspost_submission(_reddit, _submission):
     _vcj_subreddit = _reddit.subreddit(VCJ_SUBREDDIT_NAME)
 
     # crosspost the VCJC submission to the VCJ subreddit
-    _xpost = _submission.crosspost(subreddit=_vcj_subreddit, send_replies=False, flair_id="2957c1f8-092f-11ef-bfd0-7accde59c924")
+    _xpost = _submission.crosspost(subreddit=_vcj_subreddit, send_replies=False, flair_id=UNJERK_FLAIR)
     print(f'Created new crosspost submission: _xpost.id={_xpost.id}')
 
     # sticky the crossposted submission
@@ -56,16 +54,16 @@ def crosspost_submission(_reddit, _submission):
 
     return _xpost
 
-def remove_crosspost_sticky(_reddit, _excluded_submission):
+def remove_crosspost_sticky(_reddit, _excluded_title):
     """
     Remove the sticky post if it is not a crosspost of the excluded submission.
 
     Parameters:
     _reddit (praw.Reddit): The Reddit instance.
-    _excluded_submission (praw.models.Submission): The submission to exclude from removal.
+    _excluded_title (str): Don't remove the sticky if it has this title.
 
     Returns:
-    None
+    bool: True if the sticky post was removed, False otherwise. True if the sticky post was not found.
     """
     _vcj_subreddit = _reddit.subreddit(VCJ_SUBREDDIT_NAME)
     _sticky = None
@@ -80,10 +78,10 @@ def remove_crosspost_sticky(_reddit, _excluded_submission):
         try:
             _sticky = _vcj_subreddit.sticky(1)
         except prawcore.exceptions.NotFound:
-            return None
+            return True
 
     # if the sticky is a crosspost of the excluded submission, don't remove it
-    if _sticky.url == _excluded_submission.url:
+    if _sticky.title == _excluded_title:
         return None
 
     _sticky.mod.sticky(state=False)
@@ -92,6 +90,10 @@ def remove_crosspost_sticky(_reddit, _excluded_submission):
     if _sticky.author.name == _reddit.user.me().name:
         _sticky.delete()
         print(f'Removed sticky post: _sticky.id={_sticky.id}, _sticky.title={_sticky.title}')
+
+        return True
+    
+    return False
 
 def main(_reddit: praw.Reddit):
     """
@@ -104,7 +106,7 @@ def main(_reddit: praw.Reddit):
     None
     """
     _submission = select_submission(_reddit)
-    remove_crosspost_sticky(_reddit, _submission)
-    _crosspost = crosspost_submission(_reddit, _submission)
+    if remove_crosspost_sticky(_reddit, _submission.title):
+        crosspost_submission(_reddit, _submission)
     print(f'Managing crosspost of submission: id={_submission.id}, title={_submission.title}')
     return None

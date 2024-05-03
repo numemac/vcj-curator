@@ -5,8 +5,7 @@ curator.py
 import datetime
 import math
 import praw
-
-SUBREDDIT_NAME="vegancirclejerk"
+from constants import UNJERK_FLAIR, VCJ_SUBREDDIT_NAME
 
 # Found by inspecting the network at
 # https://www.reddit.com/r/vegancirclejerk/about/removal
@@ -191,6 +190,11 @@ def should_remove(_submission : praw.models.Submission):
     Returns:
     bool: True if the submission should be removed, False otherwise.
     """
+
+    # don't remove if the flair is set to UNJERK_FLAIR
+    if _submission.link_flair_template_id == UNJERK_FLAIR:
+        return False
+
     _minutes_ellapsed = adjusted_minutes_ellapsed(
         _submission.created_utc,
         minutes_ellapsed(_submission.created_utc)
@@ -234,7 +238,7 @@ def get_new_submissions(_reddit : praw.Reddit, limit : int):
     Returns:
     praw.models.listing.generator.ListingGenerator: A generator that yields submission objects.
     """
-    return _reddit.subreddit(SUBREDDIT_NAME).new(limit=limit)
+    return _reddit.subreddit(VCJ_SUBREDDIT_NAME).new(limit=limit)
 
 def submission_str(_submission : praw.models.Submission):
     """
