@@ -1,3 +1,7 @@
+"""
+curator.py
+"""
+
 import datetime
 import math
 import praw

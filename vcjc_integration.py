@@ -1,4 +1,5 @@
 """
+vcjc_integration.py
 """
 
 import praw
@@ -9,8 +10,14 @@ VCJC_SUBREDDIT_NAME = 'vegancirclejerkchat'
 
 def select_submission(_reddit):
     """
+    Select the top submission of the week from the VCJC subreddit.
+
+    Parameters:
+    _reddit (praw.Reddit): The Reddit instance.
+
+    Returns:
+    praw.models.Submission: The selected submission.
     """
-    # select the top submission of the week from VCJC
     _vcjc_subreddit = _reddit.subreddit(VCJC_SUBREDDIT_NAME)
     _vcjc_submissions = _vcjc_subreddit.top('week', limit=1)
     _vcjc_submission = next(_vcjc_submissions)
@@ -18,6 +25,16 @@ def select_submission(_reddit):
 
 def crosspost_submission(_reddit, _submission):
     """
+    Crosspost the submission to the VCJ subreddit.
+    Comment a link to the original sumission.
+    Distinguish the comment and then lock the crosspost.
+
+    Parameters:
+    _reddit (praw.Reddit): The Reddit instance.
+    _submission (praw.models.Submission): The submission to crosspost.
+
+    Returns:
+    praw.models.Submission: The crossposted submission.
     """
     _vcj_subreddit = _reddit.subreddit(VCJ_SUBREDDIT_NAME)
 
@@ -41,6 +58,14 @@ def crosspost_submission(_reddit, _submission):
 
 def remove_crosspost_sticky(_reddit, _excluded_submission):
     """
+    Remove the sticky post if it is not a crosspost of the excluded submission.
+
+    Parameters:
+    _reddit (praw.Reddit): The Reddit instance.
+    _excluded_submission (praw.models.Submission): The submission to exclude from removal.
+
+    Returns:
+    None
     """
     _vcj_subreddit = _reddit.subreddit(VCJ_SUBREDDIT_NAME)
     _sticky = None
@@ -70,6 +95,13 @@ def remove_crosspost_sticky(_reddit, _excluded_submission):
 
 def main(_reddit: praw.Reddit):
     """
+    Manage the crosspost of the top submission of the week from the VCJC subreddit.
+
+    Parameters:
+    _reddit (praw.Reddit): The Reddit instance.
+
+    Returns:
+    None
     """
     _submission = select_submission(_reddit)
     remove_crosspost_sticky(_reddit, _submission)

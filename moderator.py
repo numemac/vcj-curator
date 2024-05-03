@@ -1,4 +1,5 @@
 """
+moderator.py - Main file for the VCJ moderator bot.
 """
 
 import os
