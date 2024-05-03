@@ -13,16 +13,10 @@ USER_AGENT = f'python:vcj_mod_bot:v{VERSION} (by /u/{AUTHOR})'
 # and looking for the GET request to
 # https://oauth.reddit.com/api/v1/vegancirclejerk/removal_reasons.json
 REMOVAL_REASON_NOT_FUNNY = 'cdb7617c-6b0e-4543-85ed-8fc5cf2b8c94'
-REMOVAL_MESSAGE_NOT_FUNNY = '''This auto-curator bot declares your jerk FLOPPY.
+REMOVAL_MESSAGE_NOT_FUNNY = '''Your submission breaks rule #5:
 
-To ensure animal rights or whatever, it is pertinent that it be removed.
-
-You may trace the source of this decision back to the following code:
-
-[GitHub - numemac/vcj-curator](https://github.com/numemac/vcj-curator)
-
-**Diagnostics for the mods:**
-
+# MUST BE
+# FUNNY
 '''
 
 # Create a Reddit instance
@@ -134,15 +128,15 @@ def calculate_target(_minutes_ellapsed : int = None, _submission : praw.models.S
 
     _hours_ellapsed = _minutes_ellapsed / 60
 
-    # 1 upvote per 5 minutes
-    # 30 minutes = 6
-    # 60 minutes = 12
-    # 120 minutes = 24
-    # 240 minutes = 48
-    # 360 minutes = 72
-    # 720 minutes = 144
-    # 1440 minutes = 288
-    base_target = math.floor(_minutes_ellapsed / 5)
+    # 1 upvote per 10 minutes
+    # 30 minutes = 3
+    # 60 minutes = 6
+    # 120 minutes = 12
+    # 240 minutes = 24
+    # 360 minutes = 36
+    # 720 minutes = 72
+    # 1440 minutes = 144
+    base_target = math.floor(_minutes_ellapsed / 10)
 
     # Expect upvote rate to pick up after the first hour
     # 30 minutes = 1 + (0.5/12) = 1.0417
@@ -154,13 +148,13 @@ def calculate_target(_minutes_ellapsed : int = None, _submission : praw.models.S
     # 1440 minutes = 1 + (24/12) = 3
     hour_multiplier = 1 + (_hours_ellapsed / 12)
 
-    # 30 minutes = 6 * 1.0417 = 6.25
-    # 60 minutes = 12 * 1.0833 = 13
-    # 120 minutes = 24 * 1.1667 = 28
-    # 240 minutes = 48 * 1.3333 = 64
-    # 360 minutes = 72 * 1.5 = 108
-    # 720 minutes = 144 * 2 = 288
-    # 1440 minutes = 288 * 3 = 864
+    # 30 minutes = 3 * 1.0417 = 3.125
+    # 60 minutes = 6 * 1.0833 = 6.5
+    # 120 minutes = 12 * 1.1667 = 14
+    # 240 minutes = 24 * 1.3333 = 32
+    # 360 minutes = 36 * 1.5 = 54
+    # 720 minutes = 72 * 2 = 144
+    # 1440 minutes = 144 * 3 = 432
     return math.floor(base_target * hour_multiplier)
 
 def allow_submission(_submission : praw.models.Submission):
