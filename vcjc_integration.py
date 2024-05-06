@@ -8,17 +8,25 @@ from constants import UNJERK_FLAIR, VCJ_SUBREDDIT_NAME, VCJC_SUBREDDIT_NAME
 
 def select_submission(_reddit):
     """
-    Select the top submission of the week from the VCJC subreddit.
+    Select the top submission of the day from the VCJC subreddit.
+    Require a minimum score of 5.
 
     Parameters:
     _reddit (praw.Reddit): The Reddit instance.
 
     Returns:
     praw.models.Submission: The selected submission.
+    None: If no submission was found or the score was too low.
     """
     _vcjc_subreddit = _reddit.subreddit(VCJC_SUBREDDIT_NAME)
-    _vcjc_submissions = _vcjc_subreddit.top('week', limit=1)
+    _vcjc_submissions = _vcjc_subreddit.top('day', limit=1)
+    if _vcjc_submissions is None:
+        # no submissions found
+        return None
     _vcjc_submission = next(_vcjc_submissions)
+    if _vcjc_submission.score < 5:
+        # submission score is too low
+        return None
     return _vcjc_submission
 
 def crosspost_submission(_reddit, _submission):
@@ -92,7 +100,7 @@ def remove_crosspost_sticky(_reddit, _excluded_title):
         print(f'Removed sticky post: _sticky.id={_sticky.id}, _sticky.title={_sticky.title}')
 
         return True
-    
+
     return False
 
 def main(_reddit: praw.Reddit):
@@ -106,7 +114,11 @@ def main(_reddit: praw.Reddit):
     None
     """
     _submission = select_submission(_reddit)
+    if _submission is None:
+        return None
+
     if remove_crosspost_sticky(_reddit, _submission.title):
         crosspost_submission(_reddit, _submission)
+
     print(f'Managing crosspost of submission: id={_submission.id}, title={_submission.title}')
     return None
